@@ -1,7 +1,7 @@
 import React from 'react';
 
 const propTypes = {
-  id: React.PropTypes.number,
+  id: React.PropTypes.string,
   text: React.PropTypes.string,
 };
 
