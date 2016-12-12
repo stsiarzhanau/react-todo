@@ -107,7 +107,7 @@
 	
 	var _TodoApp2 = _interopRequireDefault(_TodoApp);
 	
-	__webpack_require__(188);
+	__webpack_require__(189);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21563,6 +21563,10 @@
 	
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 	
+	var _AddTodo = __webpack_require__(188);
+	
+	var _AddTodo2 = _interopRequireDefault(_AddTodo);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21594,16 +21598,33 @@
 	        text: 'Learn Redux'
 	      }]
 	    };
+	    _this.handleAddTodo = _this.handleAddTodo.bind(_this);
 	    return _this;
 	  }
 	
 	  _createClass(TodoApp, [{
+	    key: 'handleAddTodo',
+	    value: function handleAddTodo(text) {
+	      // let { todos } = this.state;
+	
+	      // todos
+	      // this.SetState({
+	
+	      // });
+	      alert('new todo: ' + text);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var todos = this.state.todos;
 	
 	
-	      return _react2.default.createElement(_TodoList2.default, { todos: todos });
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_TodoList2.default, { todos: todos }),
+	        _react2.default.createElement(_AddTodo2.default, { onAddTodo: this.handleAddTodo })
+	      );
 	    }
 	  }]);
 	
@@ -21698,13 +21719,105 @@
 /* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var propTypes = {
+	  onAddTodo: _react2.default.PropTypes.func
+	};
+	
+	var AddTodo = function (_Component) {
+	  _inherits(AddTodo, _Component);
+	
+	  function AddTodo(props) {
+	    _classCallCheck(this, AddTodo);
+	
+	    var _this = _possibleConstructorReturn(this, (AddTodo.__proto__ || Object.getPrototypeOf(AddTodo)).call(this, props));
+	
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(AddTodo, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      e.preventDefault();
+	      var todoText = this.todoText.value;
+	      if (typeof todoText === 'string' && todoText.length > 0) {
+	        this.todoText.value = '';
+	        this.props.onAddTodo(todoText);
+	      } else {
+	        this.todoText.focus();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'form',
+	          {
+	            onSubmit: this.handleSubmit,
+	            ref: function ref(c) {
+	              _this2.form = c;
+	            }
+	          },
+	          _react2.default.createElement('input', {
+	            type: 'text',
+	            placeholder: 'What do you need to do?',
+	            ref: function ref(c) {
+	              _this2.todoText = c;
+	            }
+	          }),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'expanded button' },
+	            'Add Todo'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return AddTodo;
+	}(_react.Component);
+	
+	AddTodo.propTypes = propTypes;
+	
+	exports.default = AddTodo;
+
+/***/ },
+/* 189 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(189);
+	var content = __webpack_require__(190);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(191)(content, {});
+	var update = __webpack_require__(192)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -21721,10 +21834,10 @@
 	}
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(190)();
+	exports = module.exports = __webpack_require__(191)();
 	// imports
 	
 	
@@ -21735,7 +21848,7 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports) {
 
 	/*
@@ -21791,7 +21904,7 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
