@@ -107,7 +107,7 @@
 	
 	var _TodoApp2 = _interopRequireDefault(_TodoApp);
 	
-	__webpack_require__(189);
+	__webpack_require__(190);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21559,11 +21559,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _TodoList = __webpack_require__(186);
+	var _TodoSearch = __webpack_require__(186);
+	
+	var _TodoSearch2 = _interopRequireDefault(_TodoSearch);
+	
+	var _TodoList = __webpack_require__(187);
 	
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 	
-	var _AddTodo = __webpack_require__(188);
+	var _AddTodo = __webpack_require__(189);
 	
 	var _AddTodo2 = _interopRequireDefault(_AddTodo);
 	
@@ -21596,13 +21600,24 @@
 	      }, {
 	        id: 4,
 	        text: 'Learn Redux'
-	      }]
+	      }],
+	      showCompleted: false,
+	      searchText: ''
 	    };
+	    _this.handleSearch = _this.handleSearch.bind(_this);
 	    _this.handleAddTodo = _this.handleAddTodo.bind(_this);
 	    return _this;
 	  }
 	
 	  _createClass(TodoApp, [{
+	    key: 'handleSearch',
+	    value: function handleSearch(showCompleted, searchText) {
+	      this.setState({
+	        showCompleted: showCompleted,
+	        searchText: searchText.toLowerCase()
+	      });
+	    }
+	  }, {
 	    key: 'handleAddTodo',
 	    value: function handleAddTodo(text) {
 	      // let { todos } = this.state;
@@ -21622,6 +21637,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        _react2.default.createElement(_TodoSearch2.default, { onSearch: this.handleSearch }),
 	        _react2.default.createElement(_TodoList2.default, { todos: todos }),
 	        _react2.default.createElement(_AddTodo2.default, { onAddTodo: this.handleAddTodo })
 	      );
@@ -21637,6 +21653,102 @@
 /* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(8);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var propTypes = {
+	  onSearch: _react2.default.PropTypes.func
+	};
+	
+	var TodoSearch = function (_Component) {
+	  _inherits(TodoSearch, _Component);
+	
+	  function TodoSearch(props) {
+	    _classCallCheck(this, TodoSearch);
+	
+	    var _this = _possibleConstructorReturn(this, (TodoSearch.__proto__ || Object.getPrototypeOf(TodoSearch)).call(this, props));
+	
+	    _this.state = {};
+	    _this.handleSearch = _this.handleSearch.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(TodoSearch, [{
+	    key: "handleSearch",
+	    value: function handleSearch() {
+	      var showCompleted = this.showCompleted.checked;
+	      var searchText = this.searchText.value;
+	      this.props.onSearch(showCompleted, searchText);
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this2 = this;
+	
+	      return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	          "div",
+	          null,
+	          _react2.default.createElement("input", {
+	            type: "search",
+	            placeholder: "Search todos",
+	            onChange: this.handleSearch,
+	            ref: function ref(c) {
+	              _this2.searchText = c;
+	            }
+	          })
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          null,
+	          _react2.default.createElement(
+	            "label",
+	            { htmlFor: "completed" },
+	            _react2.default.createElement("input", {
+	              id: "completed",
+	              type: "checkbox",
+	              onChange: this.handleSearch,
+	              ref: function ref(c) {
+	                _this2.showCompleted = c;
+	              }
+	            }),
+	            "Show completed todos"
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return TodoSearch;
+	}(_react.Component);
+	
+	TodoSearch.propTypes = propTypes;
+	
+	exports.default = TodoSearch;
+
+/***/ },
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -21649,7 +21761,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Todo = __webpack_require__(187);
+	var _Todo = __webpack_require__(188);
 	
 	var _Todo2 = _interopRequireDefault(_Todo);
 	
@@ -21678,7 +21790,7 @@
 	exports.default = TodoList;
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21716,7 +21828,7 @@
 	exports.default = Todo;
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21808,16 +21920,16 @@
 	exports.default = AddTodo;
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(190);
+	var content = __webpack_require__(191);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(192)(content, {});
+	var update = __webpack_require__(193)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -21834,10 +21946,10 @@
 	}
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(191)();
+	exports = module.exports = __webpack_require__(192)();
 	// imports
 	
 	
@@ -21848,7 +21960,7 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports) {
 
 	/*
@@ -21904,7 +22016,7 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

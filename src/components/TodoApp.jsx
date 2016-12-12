@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TodoSearch from 'TodoSearch';
 import TodoList from 'TodoList';
 import AddTodo from 'AddTodo';
 
@@ -21,8 +22,18 @@ class TodoApp extends Component {
           text: 'Learn Redux',
         },
       ],
+      showCompleted: false,
+      searchText: '',
     };
+    this.handleSearch = this.handleSearch.bind(this);
     this.handleAddTodo = this.handleAddTodo.bind(this);
+  }
+
+  handleSearch(showCompleted, searchText) {
+    this.setState({
+      showCompleted,
+      searchText: searchText.toLowerCase(),
+    });
   }
 
   handleAddTodo(text) {
@@ -40,6 +51,7 @@ class TodoApp extends Component {
 
     return (
       <div>
+        <TodoSearch onSearch={this.handleSearch} />
         <TodoList todos={todos} />
         <AddTodo onAddTodo={this.handleAddTodo} />
       </div>
