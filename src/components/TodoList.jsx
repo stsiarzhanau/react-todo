@@ -3,11 +3,20 @@ import Todo from 'Todo';
 
 const propTypes = {
   todos: React.PropTypes.arrayOf(React.PropTypes.object),
+  onToggle: React.PropTypes.func,
 };
 
 function TodoList(props) {
-  const { todos } = props;
-  const todoItems = todos.map(todo => <Todo key={todo.id} {...todo} />);
+  const { todos, onToggle } = props;
+  const todoItems = todos.map((todo) => {
+    return (
+      <Todo
+        key={todo.id}
+        {...todo}
+        onToggle={onToggle}
+      />
+    );
+  });
 
   return <div>{todoItems}</div>;
 }

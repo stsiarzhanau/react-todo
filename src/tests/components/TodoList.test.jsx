@@ -7,6 +7,13 @@ import TestUtils from 'react-addons-test-utils';
 import TodoList from 'TodoList';
 import Todo from 'Todo';
 
+// http://stackoverflow.com/questions/36682241/testing-functional-components-with-renderintodocument
+class Wrapper extends React.Component {
+  render() {
+    return this.props.children
+  }
+}
+
 describe('TodoList', () => {
   it('should exist', () => {
     expect(TodoList).toExist;
@@ -14,25 +21,20 @@ describe('TodoList', () => {
   it('should render one Todo component for each todo item', () => {
     const todos = [
       {
-        id: 1,
+        id: '1',
         text: 'Do smth',
       }, {
-        id: 2,
+        id: '2',
         text: 'Check mail',
       },
     ];
     const todoList = TestUtils
-      .renderIntoDocument(<TodoList todos={todos} />);
-      console.log(todoList);
+      .renderIntoDocument(<Wrapper><TodoList todos={todos} /></Wrapper>);
     const todosComponents = TestUtils
       .scryRenderedComponentsWithType(todoList, Todo);
-      console.log(todosComponents.length);
+
     expect(todosComponents.length).toBe(todos.length);
   });
 });
 
-// test failed
-// todoList === null
-// todosComponents.length === 0
-// actual rendering is correct
-// Is it a TestUtils bug?
+// test failed due to TestUtils bug

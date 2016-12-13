@@ -21596,22 +21596,27 @@
 	    _this.state = {
 	      todos: [{
 	        id: (0, _uuid2.default)(),
-	        text: 'Walk the dog'
+	        text: 'Walk the dog',
+	        completed: false
 	      }, {
 	        id: (0, _uuid2.default)(),
-	        text: 'Clean the yard'
+	        text: 'Clean the yard',
+	        completed: true
 	      }, {
 	        id: (0, _uuid2.default)(),
-	        text: 'Feed the cat'
+	        text: 'Feed the cat',
+	        completed: true
 	      }, {
 	        id: (0, _uuid2.default)(),
-	        text: 'Learn Redux'
+	        text: 'Learn Redux',
+	        completed: false
 	      }],
 	      showCompleted: false,
 	      searchText: ''
 	    };
 	    _this.handleSearch = _this.handleSearch.bind(_this);
 	    _this.handleAddTodo = _this.handleAddTodo.bind(_this);
+	    _this.handleToggle = _this.handleToggle.bind(_this);
 	    return _this;
 	  }
 	
@@ -21631,10 +21636,27 @@
 	      this.setState({
 	        todos: [].concat(_toConsumableArray(todos), [{
 	          text: text,
-	          id: (0, _uuid2.default)()
+	          id: (0, _uuid2.default)(),
+	          completed: false
 	        }])
 	      });
-	      // alert(`new todo: ${text}`);
+	    }
+	
+	    /* eslint-disable no-param-reassign */
+	
+	  }, {
+	    key: 'handleToggle',
+	    value: function handleToggle(id) {
+	      var updatedTodos = this.state.todos.map(function (todo) {
+	        if (todo.id === id) {
+	          todo.completed = !todo.completed;
+	        }
+	        return todo;
+	      });
+	
+	      this.setState({
+	        todos: updatedTodos
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -21646,7 +21668,7 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(_TodoSearch2.default, { onSearch: this.handleSearch }),
-	        _react2.default.createElement(_TodoList2.default, { todos: todos }),
+	        _react2.default.createElement(_TodoList2.default, { todos: todos, onToggle: this.handleToggle }),
 	        _react2.default.createElement(_AddTodo2.default, { onAddTodo: this.handleAddTodo })
 	      );
 	    }
@@ -21776,14 +21798,20 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var propTypes = {
-	  todos: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object)
+	  todos: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object),
+	  onToggle: _react2.default.PropTypes.func
 	};
 	
 	function TodoList(props) {
-	  var todos = props.todos;
+	  var todos = props.todos,
+	      onToggle = props.onToggle;
 	
 	  var todoItems = todos.map(function (todo) {
-	    return _react2.default.createElement(_Todo2.default, _extends({ key: todo.id }, todo));
+	    return _react2.default.createElement(_Todo2.default, _extends({
+	      key: todo.id
+	    }, todo, {
+	      onToggle: onToggle
+	    }));
 	  });
 	
 	  return _react2.default.createElement(
@@ -21801,7 +21829,7 @@
 /* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -21815,18 +21843,26 @@
 	
 	var propTypes = {
 	  id: _react2.default.PropTypes.string,
-	  text: _react2.default.PropTypes.string
+	  text: _react2.default.PropTypes.string,
+	  completed: _react2.default.PropTypes.bool,
+	  onToggle: _react2.default.PropTypes.func
 	};
+	
+	/* eslint-disable jsx-a11y/no-static-element-interactions */
 	
 	function Todo(props) {
 	  var id = props.id,
-	      text = props.text;
+	      text = props.text,
+	      completed = props.completed;
 	
 	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    id,
-	    '. ',
+	    "div",
+	    { onClick: function onClick() {
+	        props.onToggle(id);
+	      } },
+	    _react2.default.createElement("input", {
+	      type: "checkbox", defaultChecked: completed
+	    }),
 	    text
 	  );
 	}
