@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import TodoSearch from 'TodoSearch';
 import TodoList from 'TodoList';
 import AddTodo from 'AddTodo';
-import { setTodos, getTodos } from 'TodoAPI';
+import { setTodos, getTodos, filterTodos } from 'TodoAPI';
 
 class TodoApp extends Component {
   constructor(props) {
@@ -60,12 +60,13 @@ class TodoApp extends Component {
   }
 
   render() {
-    const { todos } = this.state;
+    const { todos, showCompleted, searchText } = this.state;
+    const filteredTodos = filterTodos(todos, showCompleted, searchText);
 
     return (
       <div>
         <TodoSearch onSearch={this.handleSearch} />
-        <TodoList todos={todos} onToggle={this.handleToggle} />
+        <TodoList todos={filteredTodos} onToggle={this.handleToggle} />
         <AddTodo onAddTodo={this.handleAddTodo} />
       </div>
     );

@@ -21652,14 +21652,18 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var todos = this.state.todos;
+	      var _state = this.state,
+	          todos = _state.todos,
+	          showCompleted = _state.showCompleted,
+	          searchText = _state.searchText;
 	
+	      var filteredTodos = (0, _TodoAPI.filterTodos)(todos, showCompleted, searchText);
 	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_TodoSearch2.default, { onSearch: this.handleSearch }),
-	        _react2.default.createElement(_TodoList2.default, { todos: todos, onToggle: this.handleToggle }),
+	        _react2.default.createElement(_TodoList2.default, { todos: filteredTodos, onToggle: this.handleToggle }),
 	        _react2.default.createElement(_AddTodo2.default, { onAddTodo: this.handleAddTodo })
 	      );
 	    }
@@ -22211,6 +22215,35 @@
 	  } catch (err) {}
 	
 	  return $.isArray(todos) ? todos : [];
+	};
+	
+	var filterTodos = exports.filterTodos = function filterTodos(todos, showCompleted, searchText) {
+	  var filteredTodos = todos;
+	
+	  /* eslint-disable arrow-body-style */
+	
+	  filteredTodos = filteredTodos.filter(function (todo) {
+	    return !todo.completed || showCompleted;
+	  });
+	
+	  filteredTodos = filteredTodos.filter(function (todo) {
+	    if (searchText) {
+	      var text = todo.text.toLowerCase();
+	      return text.includes(searchText);
+	    }
+	    return true;
+	  });
+	
+	  filteredTodos.sort(function (a, b) {
+	    if (!a.completed && b.completed) {
+	      return -1;
+	    } else if (a.completed && !b.completed) {
+	      return 1;
+	    }
+	    return 0;
+	  });
+	
+	  return filteredTodos;
 	};
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
