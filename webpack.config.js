@@ -79,6 +79,7 @@ module.exports = {
     modulesDirectories: [
       'node_modules',
       './src/components',
+      './src/api',
     ],
     extensions: ['', '.js', '.jsx', '.scss'],
   },

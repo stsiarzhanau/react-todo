@@ -9,19 +9,20 @@ module.exports = {
   plugins: [
     'react',
     'jsx-a11y',
-    'import'
+    'import',
   ],
   settings: {
     'import/resolver': {
       webpack: {
-        config: 'webpack.config.js'
-      }
-    }
+        config: 'webpack.config.js',
+      },
+    },
   },
   globals: {
     $: true,
     Foundation: true,
   },
   rules: {
-  }
+    'func-names': [2, 'as-needed'],
+  },
 }

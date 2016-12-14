@@ -6,6 +6,8 @@ const propTypes = {
   onToggle: React.PropTypes.func,
 };
 
+/* eslint-disable arrow-body-style */
+
 function TodoList(props) {
   const { todos, onToggle } = props;
   const todoItems = todos.map((todo) => {

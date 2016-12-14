@@ -37,4 +37,4 @@ describe('TodoList', () => {
   });
 });
 
-// test failed due to TestUtils bug
+// test failes due to TestUtils bug
