@@ -7,12 +7,14 @@ const propTypes = {
   completed: React.PropTypes.bool,
   onToggle: React.PropTypes.func,
   createdAt: React.PropTypes.number,
+  completedAt: React.PropTypes.number,
 };
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
 function Todo(props) {
   const { id, text, completed, createdAt, completedAt } = props;
+  const todoClassName = completed ? 'todo todo-completed' : 'todo';
   const renderDate = () => {
     let message = 'Created ';
     let timestamp = createdAt;
@@ -26,12 +28,19 @@ function Todo(props) {
   };
 
   return (
-    <div onClick={() => { props.onToggle(id); }}>
-      <input
-        type="checkbox" defaultChecked={completed}
-      />
-      <p>{text}</p>
-      <p>{renderDate()}</p>
+    <div
+      onClick={() => { props.onToggle(id); }}
+      className={todoClassName}
+    >
+      <div>
+        <input
+          type="checkbox" defaultChecked={completed}
+        />
+      </div>
+      <div>
+        <p>{text}</p>
+        <p className="todo__subtext">{renderDate()}</p>
+      </div>
     </div>
   );
 }

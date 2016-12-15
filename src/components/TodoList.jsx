@@ -20,6 +20,10 @@ function TodoList(props) {
     );
   });
 
+  if (todos.length === 0) {
+    return <p className="container__message">Nothing To Do</p>;
+  }
+
   return <div>{todoItems}</div>;
 }
 

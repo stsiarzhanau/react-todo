@@ -7,6 +7,8 @@ console.log('Current timestamp', now.unix());
 const timestamp = 1481741047;
 const currentMoment = moment.unix(timestamp);
 
+console.log(currentMoment);
+
 console.log('Current moment', currentMoment.format('MMM DD, YYYY @ h:mm a'));
 
 
