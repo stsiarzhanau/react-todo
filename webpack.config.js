@@ -74,6 +74,7 @@ module.exports = {
   resolve: {
     alias: {
       appStyles: 'src/styles/app.scss',
+      actions: 'src/actions/actions.jsx',
     },
     root: __dirname,
     modulesDirectories: [
