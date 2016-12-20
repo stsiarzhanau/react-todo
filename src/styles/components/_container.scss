@@ -15,7 +15,7 @@
     font-size: 1rem;
   }
 
-  &:last-child {
+  > :last-child {
     display: flex;
     align-items: center;
   }
