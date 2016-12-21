@@ -76,6 +76,7 @@ module.exports = {
       appStyles: 'src/styles/app.scss',
       actions: 'src/actions/actions.jsx',
       reducers: 'src/reducers/reducers.jsx',
+      configureStore: 'src/store/configureStore.jsx',
     },
     root: __dirname,
     modulesDirectories: [
