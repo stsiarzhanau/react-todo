@@ -134,19 +134,6 @@
 	// What for?
 	$(document).foundation();
 	
-	// import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-	// import Main from 'Main';
-	
-	// ReactDOM.render(
-	//   <Router history={hashHistory}>
-	//     <Route path="/" component={Main}>
-	//       <IndexRoute component={} />
-	//       <Route path="countdown" component={} />
-	//     </Route>
-	//   </Router>,
-	//   document.getElementById('app'),
-	// );
-	
 	_reactDom2.default.render(_react2.default.createElement(
 	  _reactRedux.Provider,
 	  { store: _configureStore2.default },
@@ -23800,12 +23787,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.configure = undefined;
 	
 	var _redux = __webpack_require__(196);
 	
 	var _reducers = __webpack_require__(224);
 	
-	var configure = function configure() {
+	var configure = exports.configure = function configure() {
+	  var preloadedState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	
 	  var reducer = (0, _redux.combineReducers)({
 	    searchText: _reducers.searchTextReducer,
 	    showCompleted: _reducers.showCompletedReducer,
@@ -23814,13 +23804,13 @@
 	
 	  // /* eslint-disable no-underscore-dangle */
 	  // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-	  // const store = createStore(reducer, composeEnhancers(
+	  // const store = createStore(reducer, preloadedState, composeEnhancers(
 	  //   applyMiddleware(thunk)
 	  // ));
 	  // /* eslint-enable */
 	
 	  /* eslint-disable no-underscore-dangle */
-	  var store = (0, _redux.createStore)(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+	  var store = (0, _redux.createStore)(reducer, preloadedState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 	  /* eslint-enable */
 	
 	  return store;
@@ -39072,14 +39062,6 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _uuid = __webpack_require__(335);
-	
-	var _uuid2 = _interopRequireDefault(_uuid);
-	
-	var _moment = __webpack_require__(225);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
 	var _TodoSearch = __webpack_require__(342);
 	
 	var _TodoSearch2 = _interopRequireDefault(_TodoSearch);
@@ -39096,13 +39078,13 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import uuid from 'uuid';
+	// import moment from 'moment';
 	
 	var TodoApp = function (_Component) {
 	  _inherits(TodoApp, _Component);
@@ -39118,7 +39100,7 @@
 	      searchText: ''
 	    };
 	    _this.handleSearch = _this.handleSearch.bind(_this);
-	    _this.handleAddTodo = _this.handleAddTodo.bind(_this);
+	    // this.handleAddTodo = this.handleAddTodo.bind(this);
 	    return _this;
 	  }
 	
@@ -39135,35 +39117,20 @@
 	        searchText: searchText.toLowerCase()
 	      });
 	    }
-	  }, {
-	    key: 'handleAddTodo',
-	    value: function handleAddTodo(text) {
-	      var todos = this.state.todos;
 	
-	      this.setState({
-	        todos: [].concat(_toConsumableArray(todos), [{
-	          text: text,
-	          id: (0, _uuid2.default)(),
-	          completed: false,
-	          createdAt: (0, _moment2.default)().unix(),
-	          completedAt: undefined
-	        }])
-	      });
-	    }
-	
-	    /* eslint-disable no-param-reassign */
-	
-	    // handleToggle(id) {
-	    //   const updatedTodos = this.state.todos.map((todo) => {
-	    //     if (todo.id === id) {
-	    //       todo.completed = !todo.completed;
-	    //       todo.completedAt = todo.completed ? moment().unix() : undefined;
-	    //     }
-	    //     return todo;
-	    //   });
-	
+	    // handleAddTodo(text) {
+	    //   const { todos } = this.state;
 	    //   this.setState({
-	    //     todos: updatedTodos,
+	    //     todos: [
+	    //       ...todos,
+	    //       {
+	    //         text,
+	    //         id: uuid(),
+	    //         completed: false,
+	    //         createdAt: moment().unix(),
+	    //         completedAt: undefined,
+	    //       },
+	    //     ],
 	    //   });
 	    // }
 	
@@ -39196,7 +39163,7 @@
 	              { className: 'container' },
 	              _react2.default.createElement(_TodoSearch2.default, { onSearch: this.handleSearch }),
 	              _react2.default.createElement(_TodoList2.default, null),
-	              _react2.default.createElement(_AddTodo2.default, { onAddTodo: this.handleAddTodo })
+	              _react2.default.createElement(_AddTodo2.default, null)
 	            )
 	          )
 	        )
@@ -39317,6 +39284,8 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
+	exports.TodoList = TodoList;
+	
 	var _react = __webpack_require__(8);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -39374,6 +39343,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.Todo = Todo;
 	
 	var _react = __webpack_require__(8);
 	
@@ -39470,12 +39440,21 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.AddTodo = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(8);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(185);
+	
+	var _actions = __webpack_require__(340);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -39486,10 +39465,10 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var propTypes = {
-	  onAddTodo: _react2.default.PropTypes.func
+	  dispatch: _react2.default.PropTypes.func
 	};
 	
-	var AddTodo = function (_Component) {
+	var AddTodo = exports.AddTodo = function (_Component) {
 	  _inherits(AddTodo, _Component);
 	
 	  function AddTodo(props) {
@@ -39505,10 +39484,12 @@
 	    key: 'handleSubmit',
 	    value: function handleSubmit(e) {
 	      e.preventDefault();
+	      var dispatch = this.props.dispatch;
+	
 	      var todoText = this.todoText.value;
 	      if (typeof todoText === 'string' && todoText.length > 0) {
 	        this.todoText.value = '';
-	        this.props.onAddTodo(todoText);
+	        dispatch(actions.addTodo(todoText));
 	      } else {
 	        this.todoText.focus();
 	      }
@@ -39551,7 +39532,7 @@
 	
 	AddTodo.propTypes = propTypes;
 	
-	exports.default = AddTodo;
+	exports.default = (0, _reactRedux.connect)()(AddTodo);
 
 /***/ },
 /* 346 */

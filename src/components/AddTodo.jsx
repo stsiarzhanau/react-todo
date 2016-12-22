@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from 'actions';
 
 const propTypes = {
-  onAddTodo: React.PropTypes.func,
+  dispatch: React.PropTypes.func,
 };
 
-class AddTodo extends Component {
+export class AddTodo extends Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -12,10 +14,11 @@ class AddTodo extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    const { dispatch } = this.props;
     const todoText = this.todoText.value;
     if (typeof todoText === 'string' && todoText.length > 0) {
       this.todoText.value = '';
-      this.props.onAddTodo(todoText);
+      dispatch(actions.addTodo(todoText));
     } else {
       this.todoText.focus();
     }
@@ -42,4 +45,4 @@ class AddTodo extends Component {
 
 AddTodo.propTypes = propTypes;
 
-export default AddTodo;
+export default connect()(AddTodo);

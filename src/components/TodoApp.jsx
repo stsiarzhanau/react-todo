@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import uuid from 'uuid';
-import moment from 'moment';
+// import uuid from 'uuid';
+// import moment from 'moment';
 
 import TodoSearch from 'TodoSearch';
 import TodoList from 'TodoList';
@@ -16,7 +16,6 @@ class TodoApp extends Component {
       searchText: '',
     };
     this.handleSearch = this.handleSearch.bind(this);
-    this.handleAddTodo = this.handleAddTodo.bind(this);
   }
 
   componentDidUpdate() {
@@ -27,22 +26,6 @@ class TodoApp extends Component {
     this.setState({
       showCompleted,
       searchText: searchText.toLowerCase(),
-    });
-  }
-
-  handleAddTodo(text) {
-    const { todos } = this.state;
-    this.setState({
-      todos: [
-        ...todos,
-        {
-          text,
-          id: uuid(),
-          completed: false,
-          createdAt: moment().unix(),
-          completedAt: undefined,
-        },
-      ],
     });
   }
 
@@ -58,7 +41,7 @@ class TodoApp extends Component {
             <div className="container">
               <TodoSearch onSearch={this.handleSearch} />
               <TodoList />
-              <AddTodo onAddTodo={this.handleAddTodo} />
+              <AddTodo />
             </div>
           </div>
         </div>
