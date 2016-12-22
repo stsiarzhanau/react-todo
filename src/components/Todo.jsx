@@ -1,19 +1,21 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
+import * as actions from 'actions';
 
 const propTypes = {
   id: React.PropTypes.string,
   text: React.PropTypes.string,
   completed: React.PropTypes.bool,
-  onToggle: React.PropTypes.func,
   createdAt: React.PropTypes.number,
   completedAt: React.PropTypes.number,
+  dispatch: React.PropTypes.func,
 };
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-function Todo(props) {
-  const { id, text, completed, createdAt, completedAt } = props;
+export function Todo(props) {
+  const { id, text, completed, createdAt, completedAt, dispatch } = props;
   const todoClassName = completed ? 'todo todo-completed' : 'todo';
   const renderDate = () => {
     let message = 'Created ';
@@ -29,7 +31,7 @@ function Todo(props) {
 
   return (
     <div
-      onClick={() => { props.onToggle(id); }}
+      onClick={() => { dispatch(actions.toggleTodo(id)); }}
       className={todoClassName}
     >
       <div>
@@ -47,4 +49,4 @@ function Todo(props) {
 
 Todo.propTypes = propTypes;
 
-export default Todo;
+export default connect()(Todo);
