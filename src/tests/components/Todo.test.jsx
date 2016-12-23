@@ -18,22 +18,6 @@ describe('Todo', () => {
     expect(Todo).toExist();
   });
 
-  // it('should call onToggle function with proper todo id on click', () => {
-  //   const todoData = {
-  //     id: '199',
-  //     text: 'Write todo.test.jsx test',
-  //     completed: true,
-  //   };
-  //   const spy = expect.createSpy();
-  //   const todo = TestUtils
-  //     .renderIntoDocument(<Wrapper><Todo {...todoData} onToggle={spy} /></Wrapper>);
-  //   const $elm = $(ReactDOM.findDOMNode(todo));
-
-  //   TestUtils.Simulate.click($elm[0]);
-
-  //   expect(spy).toHaveBeenCalledWith('199');
-  // });
-
   it('should dispatch TOGGLE_TODO action on click', () => {
     const todoData = {
       id: '199',

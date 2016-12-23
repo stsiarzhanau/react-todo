@@ -13,7 +13,7 @@ import ConnectedTodo, { Todo } from 'Todo';
 // http://stackoverflow.com/questions/36682241/testing-functional-components-with-renderintodocument
 class Wrapper extends React.Component {
   render() {
-    return this.props.children
+    return this.props.children;
   }
 }
 
@@ -42,7 +42,7 @@ describe('TodoList', () => {
     ];
 
     const store = configure({
-      todos
+      todos,
     });
 
     const provider = TestUtils.renderIntoDocument(
@@ -68,5 +68,3 @@ describe('TodoList', () => {
     expect($elm.find('.container__message')).toExist();
   });
 });
-
-

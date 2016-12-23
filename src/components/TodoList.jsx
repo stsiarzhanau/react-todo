@@ -1,15 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { filterTodos } from 'TodoAPI';
 
+/* eslint-disable import/no-named-as-default */
 import Todo from 'Todo';
+/* eslint-enable */
 
 const propTypes = {
   todos: React.PropTypes.arrayOf(React.PropTypes.object),
+  showCompleted: React.PropTypes.bool,
+  searchText: React.PropTypes.string,
 };
 
 export function TodoList(props) {
-  const { todos } = props;
-  const todoItems = todos.map(todo => (
+  const { todos, showCompleted, searchText } = props;
+  const filteredTodos = filterTodos(todos, showCompleted, searchText);
+  const todoItems = filteredTodos.map(todo => (
     <Todo
       key={todo.id}
       {...todo}
@@ -25,8 +31,6 @@ export function TodoList(props) {
 
 TodoList.propTypes = propTypes;
 
-function mapStateToProps(state) {
-  return { todos: state.todos };
-}
+const mapStateToProps = state => state;
 
 export default connect(mapStateToProps)(TodoList);

@@ -1,20 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+
 import store from 'configureStore';
 import * as actions from 'actions';
+import { setTodos, getTodos } from 'TodoAPI';
 
 import TodoApp from 'TodoApp';
 
 import './styles/app.scss';
 
 store.subscribe(() => {
-  console.log('New state: ', store.getState());
+  const state = store.getState();
+  console.log('New state: ', state); // eslint-disable-line no-console
+  setTodos(state.todos);
 });
 
-store.dispatch(actions.addTodo('Wash cat'));
-store.dispatch(actions.setSearchText('yard'));
-store.dispatch(actions.toggleShowCompleted());
+const initialTodos = getTodos();
+store.dispatch(actions.addTodos(initialTodos));
+
 
 // What for?
 $(document).foundation();

@@ -1,33 +1,32 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from 'actions';
 
 const propTypes = {
-  onSearch: React.PropTypes.func,
+  dispatch: React.PropTypes.func,
+  showCompleted: React.PropTypes.bool,
+  searchText: React.PropTypes.string,
 };
 
-class TodoSearch extends Component {
+export class TodoSearch extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
-    this.handleSearch = this.handleSearch.bind(this);
-  }
-
-  handleSearch() {
-    const showCompleted = this.showCompleted.checked;
-    const searchText = this.searchText.value;
-    this.props.onSearch(showCompleted, searchText);
   }
 
   render() {
+    const { dispatch, showCompleted, searchText } = this.props;
     return (
       <div className="container__header">
         <div>
           <input
             type="search"
             placeholder="Search todos"
-            onChange={this.handleSearch}
-            ref={(c) => { this.searchText = c; }}
+            value={searchText}
+            onChange={() => {
+              const searchTextValue = this.searchTextInput.value;
+              dispatch(actions.setSearchText(searchTextValue));
+            }}
+            ref={(c) => { this.searchTextInput = c; }}
           />
         </div>
         <div>
@@ -35,8 +34,9 @@ class TodoSearch extends Component {
             <input
               id="completed"
               type="checkbox"
-              onChange={this.handleSearch}
-              ref={(c) => { this.showCompleted = c; }}
+              checked={showCompleted}
+              onChange={() => { dispatch(actions.toggleShowCompleted()); }}
+              ref={(c) => { this.showCompletedCheckbox = c; }}
             />
             Show completed todos
           </label>
@@ -49,4 +49,11 @@ class TodoSearch extends Component {
 
 TodoSearch.propTypes = propTypes;
 
-export default TodoSearch;
+function mapStateToProps(state) {
+  return {
+    showCompleted: state.showCompleted,
+    searchText: state.searchText,
+  };
+}
+
+export default connect(mapStateToProps)(TodoSearch);

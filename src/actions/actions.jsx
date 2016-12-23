@@ -16,3 +16,8 @@ export const addTodo = text => ({
   text,
   type: 'ADD_TODO',
 });
+
+export const addTodos = todos => ({
+  todos,
+  type: 'ADD_TODOS',
+});

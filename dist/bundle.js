@@ -113,7 +113,9 @@
 	
 	var actions = _interopRequireWildcard(_actions);
 	
-	var _TodoApp = __webpack_require__(341);
+	var _TodoAPI = __webpack_require__(341);
+	
+	var _TodoApp = __webpack_require__(342);
 	
 	var _TodoApp2 = _interopRequireDefault(_TodoApp);
 	
@@ -124,12 +126,13 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	_configureStore2.default.subscribe(function () {
-	  console.log('New state: ', _configureStore2.default.getState());
+	  var state = _configureStore2.default.getState();
+	  console.log('New state: ', state); // eslint-disable-line no-console
+	  (0, _TodoAPI.setTodos)(state.todos);
 	});
 	
-	_configureStore2.default.dispatch(actions.addTodo('Wash cat'));
-	_configureStore2.default.dispatch(actions.setSearchText('yard'));
-	_configureStore2.default.dispatch(actions.toggleShowCompleted());
+	var initialTodos = (0, _TodoAPI.getTodos)();
+	_configureStore2.default.dispatch(actions.addTodos(initialTodos));
 	
 	// What for?
 	$(document).foundation();
@@ -23894,6 +23897,8 @@
 	        }
 	        return todo;
 	      });
+	    case 'ADD_TODOS':
+	      return [].concat(_toConsumableArray(state), _toConsumableArray(action.todos));
 	    default:
 	      return state;
 	  }
@@ -39045,9 +39050,76 @@
 	    type: 'ADD_TODO'
 	  };
 	};
+	
+	var addTodos = exports.addTodos = function addTodos(todos) {
+	  return {
+	    todos: todos,
+	    type: 'ADD_TODOS'
+	  };
+	};
 
 /***/ },
 /* 341 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var setTodos = exports.setTodos = function setTodos(todos) {
+	  if ($.isArray(todos)) {
+	    localStorage.setItem('todos', JSON.stringify(todos));
+	    return todos;
+	  }
+	  return undefined;
+	};
+	
+	var getTodos = exports.getTodos = function getTodos() {
+	  var stringTodos = localStorage.getItem('todos');
+	  var todos = [];
+	
+	  /* eslint-disable no-empty */
+	
+	  try {
+	    todos = JSON.parse(stringTodos);
+	  } catch (err) {}
+	
+	  return $.isArray(todos) ? todos : [];
+	};
+	
+	var filterTodos = exports.filterTodos = function filterTodos(todos, showCompleted, searchText) {
+	  var filteredTodos = todos;
+	
+	  /* eslint-disable arrow-body-style */
+	
+	  filteredTodos = filteredTodos.filter(function (todo) {
+	    return !todo.completed || showCompleted;
+	  });
+	
+	  filteredTodos = filteredTodos.filter(function (todo) {
+	    if (searchText) {
+	      var text = todo.text.toLowerCase();
+	      return text.includes(searchText.toLowerCase());
+	    }
+	    return true;
+	  });
+	
+	  filteredTodos.sort(function (a, b) {
+	    if (!a.completed && b.completed) {
+	      return -1;
+	    } else if (a.completed && !b.completed) {
+	      return 1;
+	    }
+	    return 0;
+	  });
+	
+	  return filteredTodos;
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+
+/***/ },
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39062,19 +39134,17 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _TodoSearch = __webpack_require__(342);
+	var _TodoSearch = __webpack_require__(343);
 	
 	var _TodoSearch2 = _interopRequireDefault(_TodoSearch);
 	
-	var _TodoList = __webpack_require__(343);
+	var _TodoList = __webpack_require__(344);
 	
 	var _TodoList2 = _interopRequireDefault(_TodoList);
 	
-	var _AddTodo = __webpack_require__(345);
+	var _AddTodo = __webpack_require__(346);
 	
 	var _AddTodo2 = _interopRequireDefault(_AddTodo);
-	
-	var _TodoAPI = __webpack_require__(346);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -39083,67 +39153,32 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import uuid from 'uuid';
-	// import moment from 'moment';
+	
+	/* eslint-disable import/no-named-as-default */
+	
+	
+	/* eslint-enable */
 	
 	var TodoApp = function (_Component) {
 	  _inherits(TodoApp, _Component);
 	
-	  function TodoApp(props) {
+	  function TodoApp() {
 	    _classCallCheck(this, TodoApp);
 	
-	    var _this = _possibleConstructorReturn(this, (TodoApp.__proto__ || Object.getPrototypeOf(TodoApp)).call(this, props));
-	
-	    _this.state = {
-	      todos: (0, _TodoAPI.getTodos)(),
-	      showCompleted: false,
-	      searchText: ''
-	    };
-	    _this.handleSearch = _this.handleSearch.bind(_this);
-	    // this.handleAddTodo = this.handleAddTodo.bind(this);
-	    return _this;
+	    return _possibleConstructorReturn(this, (TodoApp.__proto__ || Object.getPrototypeOf(TodoApp)).apply(this, arguments));
 	  }
 	
 	  _createClass(TodoApp, [{
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      (0, _TodoAPI.setTodos)(this.state.todos);
-	    }
-	  }, {
-	    key: 'handleSearch',
-	    value: function handleSearch(showCompleted, searchText) {
-	      this.setState({
-	        showCompleted: showCompleted,
-	        searchText: searchText.toLowerCase()
-	      });
-	    }
+	    key: 'render',
 	
-	    // handleAddTodo(text) {
-	    //   const { todos } = this.state;
+	    // handleSearch(showCompleted, searchText) {
 	    //   this.setState({
-	    //     todos: [
-	    //       ...todos,
-	    //       {
-	    //         text,
-	    //         id: uuid(),
-	    //         completed: false,
-	    //         createdAt: moment().unix(),
-	    //         completedAt: undefined,
-	    //       },
-	    //     ],
+	    //     showCompleted,
+	    //     searchText: searchText.toLowerCase(),
 	    //   });
 	    // }
 	
-	  }, {
-	    key: 'render',
 	    value: function render() {
-	      var _state = this.state,
-	          todos = _state.todos,
-	          showCompleted = _state.showCompleted,
-	          searchText = _state.searchText;
-	
-	      var filteredTodos = (0, _TodoAPI.filterTodos)(todos, showCompleted, searchText);
-	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -39161,7 +39196,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'container' },
-	              _react2.default.createElement(_TodoSearch2.default, { onSearch: this.handleSearch }),
+	              _react2.default.createElement(_TodoSearch2.default, null),
 	              _react2.default.createElement(_TodoList2.default, null),
 	              _react2.default.createElement(_AddTodo2.default, null)
 	            )
@@ -39177,20 +39212,29 @@
 	exports.default = TodoApp;
 
 /***/ },
-/* 342 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.TodoSearch = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(8);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(185);
+	
+	var _actions = __webpack_require__(340);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -39201,64 +39245,67 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var propTypes = {
-	  onSearch: _react2.default.PropTypes.func
+	  dispatch: _react2.default.PropTypes.func,
+	  showCompleted: _react2.default.PropTypes.bool,
+	  searchText: _react2.default.PropTypes.string
 	};
 	
-	var TodoSearch = function (_Component) {
+	var TodoSearch = exports.TodoSearch = function (_Component) {
 	  _inherits(TodoSearch, _Component);
 	
 	  function TodoSearch(props) {
 	    _classCallCheck(this, TodoSearch);
 	
-	    var _this = _possibleConstructorReturn(this, (TodoSearch.__proto__ || Object.getPrototypeOf(TodoSearch)).call(this, props));
-	
-	    _this.state = {};
-	    _this.handleSearch = _this.handleSearch.bind(_this);
-	    return _this;
+	    return _possibleConstructorReturn(this, (TodoSearch.__proto__ || Object.getPrototypeOf(TodoSearch)).call(this, props));
 	  }
 	
 	  _createClass(TodoSearch, [{
-	    key: "handleSearch",
-	    value: function handleSearch() {
-	      var showCompleted = this.showCompleted.checked;
-	      var searchText = this.searchText.value;
-	      this.props.onSearch(showCompleted, searchText);
-	    }
-	  }, {
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 	
+	      var _props = this.props,
+	          dispatch = _props.dispatch,
+	          showCompleted = _props.showCompleted,
+	          searchText = _props.searchText;
+	
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "container__header" },
+	        'div',
+	        { className: 'container__header' },
 	        _react2.default.createElement(
-	          "div",
+	          'div',
 	          null,
-	          _react2.default.createElement("input", {
-	            type: "search",
-	            placeholder: "Search todos",
-	            onChange: this.handleSearch,
+	          _react2.default.createElement('input', {
+	            type: 'search',
+	            placeholder: 'Search todos',
+	            value: searchText,
+	            onChange: function onChange() {
+	              var searchTextValue = _this2.searchTextInput.value;
+	              dispatch(actions.setSearchText(searchTextValue));
+	            },
 	            ref: function ref(c) {
-	              _this2.searchText = c;
+	              _this2.searchTextInput = c;
 	            }
 	          })
 	        ),
 	        _react2.default.createElement(
-	          "div",
+	          'div',
 	          null,
 	          _react2.default.createElement(
-	            "label",
-	            { htmlFor: "completed" },
-	            _react2.default.createElement("input", {
-	              id: "completed",
-	              type: "checkbox",
-	              onChange: this.handleSearch,
+	            'label',
+	            { htmlFor: 'completed' },
+	            _react2.default.createElement('input', {
+	              id: 'completed',
+	              type: 'checkbox',
+	              checked: showCompleted,
+	              onChange: function onChange() {
+	                dispatch(actions.toggleShowCompleted());
+	              },
 	              ref: function ref(c) {
-	                _this2.showCompleted = c;
+	                _this2.showCompletedCheckbox = c;
 	              }
 	            }),
-	            "Show completed todos"
+	            'Show completed todos'
 	          )
 	        )
 	      );
@@ -39270,10 +39317,17 @@
 	
 	TodoSearch.propTypes = propTypes;
 	
-	exports.default = TodoSearch;
+	function mapStateToProps(state) {
+	  return {
+	    showCompleted: state.showCompleted,
+	    searchText: state.searchText
+	  };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(TodoSearch);
 
 /***/ },
-/* 343 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39284,6 +39338,9 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
+	/* eslint-disable import/no-named-as-default */
+	
+	
 	exports.TodoList = TodoList;
 	
 	var _react = __webpack_require__(8);
@@ -39292,20 +39349,29 @@
 	
 	var _reactRedux = __webpack_require__(185);
 	
-	var _Todo = __webpack_require__(344);
+	var _TodoAPI = __webpack_require__(341);
+	
+	var _Todo = __webpack_require__(345);
 	
 	var _Todo2 = _interopRequireDefault(_Todo);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/* eslint-enable */
+	
 	var propTypes = {
-	  todos: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object)
+	  todos: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object),
+	  showCompleted: _react2.default.PropTypes.bool,
+	  searchText: _react2.default.PropTypes.string
 	};
 	
 	function TodoList(props) {
-	  var todos = props.todos;
+	  var todos = props.todos,
+	      showCompleted = props.showCompleted,
+	      searchText = props.searchText;
 	
-	  var todoItems = todos.map(function (todo) {
+	  var filteredTodos = (0, _TodoAPI.filterTodos)(todos, showCompleted, searchText);
+	  var todoItems = filteredTodos.map(function (todo) {
 	    return _react2.default.createElement(_Todo2.default, _extends({
 	      key: todo.id
 	    }, todo));
@@ -39328,14 +39394,14 @@
 	
 	TodoList.propTypes = propTypes;
 	
-	function mapStateToProps(state) {
-	  return { todos: state.todos };
-	}
+	var mapStateToProps = function mapStateToProps(state) {
+	  return state;
+	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(TodoList);
 
 /***/ },
-/* 344 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39432,7 +39498,7 @@
 	exports.default = (0, _reactRedux.connect)()(Todo);
 
 /***/ },
-/* 345 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39533,66 +39599,6 @@
 	AddTodo.propTypes = propTypes;
 	
 	exports.default = (0, _reactRedux.connect)()(AddTodo);
-
-/***/ },
-/* 346 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function($) {'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var setTodos = exports.setTodos = function setTodos(todos) {
-	  if ($.isArray(todos)) {
-	    localStorage.setItem('todos', JSON.stringify(todos));
-	    return todos;
-	  }
-	  return undefined;
-	};
-	
-	var getTodos = exports.getTodos = function getTodos() {
-	  var stringTodos = localStorage.getItem('todos');
-	  var todos = [];
-	
-	  /* eslint-disable no-empty */
-	
-	  try {
-	    todos = JSON.parse(stringTodos);
-	  } catch (err) {}
-	
-	  return $.isArray(todos) ? todos : [];
-	};
-	
-	var filterTodos = exports.filterTodos = function filterTodos(todos, showCompleted, searchText) {
-	  var filteredTodos = todos;
-	
-	  /* eslint-disable arrow-body-style */
-	
-	  filteredTodos = filteredTodos.filter(function (todo) {
-	    return !todo.completed || showCompleted;
-	  });
-	
-	  filteredTodos = filteredTodos.filter(function (todo) {
-	    if (searchText) {
-	      var text = todo.text.toLowerCase();
-	      return text.includes(searchText);
-	    }
-	    return true;
-	  });
-	
-	  filteredTodos.sort(function (a, b) {
-	    if (!a.completed && b.completed) {
-	      return -1;
-	    } else if (a.completed && !b.completed) {
-	      return 1;
-	    }
-	    return 0;
-	  });
-	
-	  return filteredTodos;
-	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ },
 /* 347 */

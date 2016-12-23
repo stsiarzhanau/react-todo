@@ -33,7 +33,7 @@ export const filterTodos = (todos, showCompleted, searchText) => {
   filteredTodos = filteredTodos.filter((todo) => {
     if (searchText) {
       const text = todo.text.toLowerCase();
-      return text.includes(searchText);
+      return text.includes(searchText.toLowerCase());
     }
     return true;
   });
